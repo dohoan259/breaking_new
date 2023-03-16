@@ -1,3 +1,4 @@
+import 'package:breaking_new/domain/entities/article_entity.dart';
 import 'package:breaking_new/domain/entities/error_entity.dart';
 import 'package:breaking_new/presentation/base/base_controller.dart';
 import 'package:breaking_new/presentation/base/base_state.dart';
@@ -21,15 +22,40 @@ class BreakingNewsController extends BaseController<BreakingNewsState> {
       final articles = await _getArticleListUseCase.call(params: params);
       final noMoreData = articles.length < defaultPageSize;
       final BreakingNewsState clone = state.copyWith(
-          screenStatus: ScreenStatus.loaded,
-          articles: articles,
-          page: state.page + 1,
-          noMoreData: noMoreData);
+        screenStatus: ScreenStatus.loaded,
+        articles: articles,
+        page: state.page + 1,
+        noMoreData: noMoreData,
+      );
       state = clone;
-    } catch (e) {
+    } on ErrorEntity catch (e) {
       final BreakingNewsState clone =
           state.copyWith(screenStatus: ScreenStatus.failed);
       state = clone;
+      return e;
+    }
+    return null;
+  }
+
+  Future<ErrorEntity?> loadMore() async {
+    try {
+      final params = Params(page: state.page);
+      final newArticles = await _getArticleListUseCase.call(params: params);
+      final noMoreData = newArticles.length < defaultPageSize;
+      final articles = <ArticleEntity>[];
+      articles.addAll(state.articles);
+      articles.addAll(newArticles);
+      final BreakingNewsState clone = state.copyWith(
+        articles: articles,
+        page: noMoreData ? state.page : state.page + 1,
+        noMoreData: noMoreData,
+      );
+      state = clone;
+    } on ErrorEntity catch (e) {
+      final BreakingNewsState clone =
+          state.copyWith(screenStatus: ScreenStatus.failed);
+      state = clone;
+      return e;
     }
     return null;
   }

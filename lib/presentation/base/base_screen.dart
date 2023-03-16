@@ -17,6 +17,8 @@ abstract class BaseScreen<C extends BaseController<T>, T extends BaseState>
 
   Widget contentBuilder(BuildContext context);
 
+  void onInitState(BuildContext context) {}
+
   C buildController() {
     return getIt<C>();
   }
@@ -40,6 +42,7 @@ class _BaseScreenState<C extends BaseController, T extends BaseState>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<C>(context, listen: false).loadData();
     });
+    widget.onInitState(context);
     super.initState();
   }
 

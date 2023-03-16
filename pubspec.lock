@@ -43,6 +43,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.3"
+  awesome_dio_interceptor:
+    dependency: "direct main"
+    description:
+      name: awesome_dio_interceptor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2+4"
   boolean_selector:
     dependency: transitive
     description:
@@ -141,6 +148,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+  colorize:
+    dependency: transitive
+    description:
+      name: colorize
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   convert:
     dependency: transitive
     description:

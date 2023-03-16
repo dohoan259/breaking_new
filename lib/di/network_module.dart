@@ -1,4 +1,6 @@
+import 'package:awesome_dio_interceptor/awesome_dio_interceptor.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
 import '../data/remote/services/api_service.dart';
@@ -14,7 +16,18 @@ abstract class NetworkModule {
         connectTimeout: 30000,
         receiveTimeout: 30000,
       ),
-    );
+    )..interceptors.add(
+        AwesomeDioInterceptor(
+          // Disabling headers and timeout would minimize the logging output.
+          // Optional, defaults to true
+          logRequestTimeout: false,
+          logRequestHeaders: false,
+          logResponseHeaders: false,
+
+          // Optional, defaults to the 'log' function in the 'dart:developer' package.
+          logger: debugPrint,
+        ),
+      );
 
     return dio;
   }
