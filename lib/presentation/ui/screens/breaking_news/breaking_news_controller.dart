@@ -39,6 +39,9 @@ class BreakingNewsController extends BaseController<BreakingNewsState> {
 
   Future<ErrorEntity?> loadMore() async {
     try {
+      if (state.noMoreData) {
+        return null;
+      }
       final params = Params(page: state.page);
       final newArticles = await _getArticleListUseCase.call(params: params);
       final noMoreData = newArticles.length < defaultPageSize;
@@ -47,7 +50,7 @@ class BreakingNewsController extends BaseController<BreakingNewsState> {
       articles.addAll(newArticles);
       final BreakingNewsState clone = state.copyWith(
         articles: articles,
-        page: noMoreData ? state.page : state.page + 1,
+        page: state.page + 1,
         noMoreData: noMoreData,
       );
       state = clone;
