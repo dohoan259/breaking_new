@@ -1,21 +1,33 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:breaking_new/presentation/base/base_state.dart';
 import 'package:breaking_new/presentation/ui/dialog/loading_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:provider/provider.dart';
 
+import '../../di/di.dart';
 import '../ui/widgets/uninitialized_widget.dart';
 import 'base_controller.dart';
 
-abstract class BaseScreen<C extends BaseController, T extends BaseState>
-    extends StatefulWidget {
+abstract class BaseScreen<C extends BaseController<T>, T extends BaseState>
+    extends StatefulWidget implements AutoRouteWrapper {
   const BaseScreen({
     Key? key,
-    this.errorView,
   }) : super(key: key);
 
   Widget contentBuilder(BuildContext context);
 
-  final Widget? errorView;
+  C buildController() {
+    return getIt<C>();
+  }
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return StateNotifierProvider<C, T>(
+      create: (_) => buildController(),
+      builder: (_, __) => this,
+    );
+  }
 
   @override
   State<BaseScreen> createState() => _BaseScreenState<C, T>();

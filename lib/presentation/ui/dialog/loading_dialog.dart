@@ -1,5 +1,5 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class LoadingDialog {
   static final LoadingDialog _singleton = LoadingDialog._internal();
@@ -10,7 +10,7 @@ class LoadingDialog {
 
   LoadingDialog._internal();
 
-  late BuildContext _context;
+  BuildContext? _context;
 
   show(BuildContext context) {
     _context = context;
@@ -31,6 +31,6 @@ class LoadingDialog {
   }
 
   void hide() {
-    _context.pop();
+    _context?.popRoute();
   }
 }
