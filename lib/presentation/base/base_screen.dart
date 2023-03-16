@@ -6,6 +6,7 @@ import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../di/di.dart';
+import '../ui/dialog/error_dialog.dart';
 import '../ui/widgets/uninitialized_widget.dart';
 import 'base_controller.dart';
 
@@ -40,7 +41,11 @@ class _BaseScreenState<C extends BaseController, T extends BaseState>
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<C>(context, listen: false).loadData();
+      context.read<C>().loadData().then((e) {
+        if (e != null) {
+          getIt<ErrorDialog>().show(context, e.title, e.message);
+        }
+      });
     });
     widget.onInitState(context);
     super.initState();
@@ -71,9 +76,9 @@ class _BaseScreenState<C extends BaseController, T extends BaseState>
                 Selector<T, bool>(
                     builder: (_, processing, __) {
                       if (processing) {
-                        LoadingDialog().show(context);
+                        getIt<LoadingDialog>().show(context);
                       } else {
-                        LoadingDialog().hide();
+                        getIt<LoadingDialog>().hide();
                       }
                       return const SizedBox();
                     },

@@ -20,12 +20,10 @@ class BreakingNewsController extends BaseController<BreakingNewsState> {
     try {
       final params = Params(page: state.page);
       final articles = await _getArticleListUseCase.call(params: params);
-      final noMoreData = articles.length < defaultPageSize;
       final BreakingNewsState clone = state.copyWith(
         screenStatus: ScreenStatus.loaded,
         articles: articles,
         page: state.page + 1,
-        noMoreData: noMoreData,
       );
       state = clone;
     } on ErrorEntity catch (e) {

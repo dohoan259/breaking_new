@@ -13,8 +13,8 @@ abstract class NetworkModule {
       BaseOptions(
         contentType: 'application/json',
         baseUrl: "https://newsapi.org/v2",
-        connectTimeout: 30000,
-        receiveTimeout: 30000,
+        connectTimeout: 10000,
+        receiveTimeout: 10000,
       ),
     )..interceptors.add(
         AwesomeDioInterceptor(

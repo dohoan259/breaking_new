@@ -1,15 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 
+@singleton
 class LoadingDialog {
-  static final LoadingDialog _singleton = LoadingDialog._internal();
-
-  factory LoadingDialog() {
-    return _singleton;
-  }
-
-  LoadingDialog._internal();
-
   BuildContext? _context;
 
   show(BuildContext context) {

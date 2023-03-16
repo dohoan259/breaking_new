@@ -1,6 +1,8 @@
+import 'package:breaking_new/data/error_handler.dart';
 import 'package:breaking_new/data/mappers/breaking_news.dart';
 import 'package:breaking_new/data/remote/models/requests/breaking_news_request.dart';
 import 'package:breaking_new/data/remote/sources/breaking_news_remote_source.dart';
+import 'package:breaking_new/di/di.dart';
 import 'package:breaking_new/domain/entities/article_entity.dart';
 import 'package:breaking_new/domain/repositories/breaking_news_repository.dart';
 import 'package:injectable/injectable.dart';
@@ -18,10 +20,14 @@ class BreakingNewsRepositoryImpl implements BreakingNewsRepository {
     required int page,
     required int pageSize,
   }) async {
-    final request = BreakingNewsRequest(
-        apiKey: apiKey, sources: sources, page: page, pageSize: pageSize);
-    final articleList =
-        await breakingNewsRemoteSource.getBreakingNewsArticles(request);
-    return articleList.map((a) => a.toEntity()).toList();
+    try {
+      final request = BreakingNewsRequest(
+          apiKey: apiKey, sources: sources, page: page, pageSize: pageSize);
+      final articleList =
+          await breakingNewsRemoteSource.getBreakingNewsArticles(request);
+      return articleList.map((a) => a.toEntity()).toList();
+    } catch (e) {
+      throw getIt<ErrorHandler>().handleError(e);
+    }
   }
 }
