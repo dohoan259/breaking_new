@@ -18,6 +18,7 @@ extension ArticleX on Article {
       url: url,
       urlToImage: urlToImage,
       publishedAt: publishedAt,
+      description: description,
       content: content,
     );
   }

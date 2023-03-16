@@ -33,7 +33,9 @@ class BreakingNewsScreen
         ),
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              // todo: save the article
+            },
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: Icon(Ionicons.bookmark, color: Colors.black),
