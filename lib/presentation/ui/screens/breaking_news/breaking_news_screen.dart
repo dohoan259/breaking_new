@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:breaking_new/presentation/base/base_screen.dart';
 import 'package:breaking_new/presentation/routers/routers.gr.dart';
+import 'package:breaking_new/utils/extensions/scroll_controller_extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -17,13 +18,8 @@ class BreakingNewsScreen
 
   @override
   void onInitState(BuildContext context) {
-    _scrollController.addListener(() {
-      if (_scrollController.offset >=
-              _scrollController.position.maxScrollExtent &&
-          !_scrollController.position.outOfRange) {
-        context.read<BreakingNewsController>().loadMore();
-      }
-    });
+    _scrollController.onScrollEndsListener(
+        () => context.read<BreakingNewsController>().loadMore());
     super.onInitState(context);
   }
 
