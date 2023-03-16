@@ -28,7 +28,7 @@ class BreakingNewsController extends BaseController<BreakingNewsState> {
       state = clone;
     } on ErrorEntity catch (e) {
       final BreakingNewsState clone =
-          state.copyWith(screenStatus: ScreenStatus.failed);
+          state.copyWith(screenStatus: ScreenStatus.loaded, noMoreData: true);
       state = clone;
       return e;
     }

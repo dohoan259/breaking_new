@@ -14,6 +14,6 @@ class BreakingNewsState extends BaseState with _$BreakingNewsState {
     @Default(null) ErrorEntity? errorEntity,
     @Default([]) List<ArticleEntity> articles,
     @Default(1) int page,
-    @Default(true) bool noMoreData,
+    @Default(false) bool noMoreData,
   }) = _BreakingNewsState;
 }
