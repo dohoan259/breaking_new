@@ -20,11 +20,15 @@ class BreakingNewsScreen
   void onInitState(BuildContext context) {
     _scrollController.onScrollEndsListener(
         () => context.read<BreakingNewsController>().loadMore());
+    retryMap.addAll({
+      '12': (int page) => context.read<BreakingNewsController>().loadMore()
+    });
+
     super.onInitState(context);
   }
 
   @override
-  Widget contentBuilder(BuildContext context) {
+  Widget builder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(

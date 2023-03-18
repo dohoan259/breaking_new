@@ -1,8 +1,11 @@
 class ErrorEntity implements Exception {
-  const ErrorEntity({required this.title, required this.message});
+  const ErrorEntity(
+      {required this.title, required this.message, this.tag, this.params});
 
   final String title;
   final String message;
+  final String? tag;
+  final dynamic params;
 
   @override
   String toString() {
@@ -80,4 +83,9 @@ class ServerInternalException extends ErrorEntity {
 class DefaultException extends ErrorEntity {
   DefaultException(String message)
       : super(title: 'Server exception', message: message);
+}
+
+class BusinessException extends ErrorEntity {
+  BusinessException(String title, String message, {String? tag, dynamic params})
+      : super(title: title, message: message, tag: tag, params: params);
 }

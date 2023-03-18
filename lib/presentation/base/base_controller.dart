@@ -10,4 +10,8 @@ abstract class BaseController<S extends BaseState> extends StateNotifier<S>
   Future<ErrorEntity?> loadData();
 
   Future<void> reload() async {}
+
+  void handleRetry(Function retryFunction, dynamic param) {
+    retryFunction(param);
+  }
 }

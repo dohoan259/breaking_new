@@ -1,5 +1,5 @@
 import 'package:breaking_new/domain/repositories/breaking_news_repository.dart';
-import 'package:breaking_new/domain/usecases/use_case.dart';
+import 'package:breaking_new/domain/use_cases/use_case.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../utils/constants/num.dart';

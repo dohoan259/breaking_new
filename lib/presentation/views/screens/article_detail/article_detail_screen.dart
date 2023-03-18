@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:breaking_new/domain/entities/article_entity.dart';
-import 'package:breaking_new/presentation/ui/screens/article_detail/components/content_description.dart';
-import 'package:breaking_new/presentation/ui/screens/article_detail/components/header.dart';
-import 'package:breaking_new/presentation/ui/screens/article_detail/components/media.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+
+import 'components/content_description.dart';
+import 'components/header.dart';
+import 'components/media.dart';
 
 class ArticleDetailScreen extends StatelessWidget {
   const ArticleDetailScreen({

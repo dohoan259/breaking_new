@@ -1,27 +1,37 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:breaking_new/domain/entities/error_entity.dart';
 import 'package:breaking_new/presentation/base/base_state.dart';
-import 'package:breaking_new/presentation/ui/dialog/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../di/di.dart';
-import '../ui/dialog/error_dialog.dart';
-import '../ui/widgets/uninitialized_widget.dart';
+import '../views/dialogs/error_dialog.dart';
+import '../views/dialogs/error_dialog_with_retry.dart';
+import '../views/dialogs/loading_dialog.dart';
+import '../views/widgets/uninitialized_widget.dart';
 import 'base_controller.dart';
 
 abstract class BaseScreen<C extends BaseController<T>, T extends BaseState>
     extends StatefulWidget implements AutoRouteWrapper {
-  const BaseScreen({
+  BaseScreen({
     Key? key,
   }) : super(key: key);
 
-  Widget contentBuilder(BuildContext context);
+  Widget builder(BuildContext context);
 
   void onInitState(BuildContext context) {}
 
   C buildController() {
     return getIt<C>();
+  }
+
+  final retryMap = <String, Function>{};
+
+  void doOnRetryWithTag(String tag) {
+    if (retryMap[tag] != null) {
+      retryMap[tag]!();
+    }
   }
 
   @override
@@ -66,12 +76,11 @@ class _BaseScreenState<C extends BaseController, T extends BaseState>
           if (viewState == ScreenStatus.uninitialized) {
             return const UninitializedWidget();
           } else {
-            // todo: error: mapping error with error code
             return Stack(
               children: [
                 Scaffold(
                   backgroundColor: Colors.black38,
-                  body: widget.contentBuilder(context),
+                  body: widget.builder(context),
                 ),
                 Selector<T, bool>(
                     builder: (_, processing, __) {
@@ -82,7 +91,28 @@ class _BaseScreenState<C extends BaseController, T extends BaseState>
                       }
                       return const SizedBox();
                     },
-                    selector: (_, state) => state.processing)
+                    selector: (_, state) => state.processing),
+                Selector<T, ErrorEntity?>(
+                  selector: (_, state) => state.errorEntity,
+                  builder: (_, errorEntity, __) {
+                    if (errorEntity != null && errorEntity.tag != null) {
+                      Future.microtask(() {
+                        getIt<ErrorDialogWithRetry>().show(
+                            context,
+                            errorEntity.title,
+                            errorEntity.message,
+                            errorEntity.tag!,
+                            errorEntity.params!, () {
+                          context.read<C>().handleRetry(
+                              widget.retryMap[errorEntity.tag!]!,
+                              errorEntity.params!);
+                        });
+                      });
+                      widget.retryMap['12']!(10);
+                    }
+                    return const SizedBox();
+                  },
+                )
               ],
             );
           }

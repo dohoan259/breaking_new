@@ -5,7 +5,7 @@ import 'package:breaking_new/presentation/base/base_state.dart';
 import 'package:breaking_new/utils/constants/num.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../domain/usecases/get_article_list_use_case.dart';
+import '../../../../domain/use_cases/get_article_list_use_case.dart';
 import 'breaking_news_state.dart';
 
 @injectable
@@ -36,6 +36,11 @@ class BreakingNewsController extends BaseController<BreakingNewsState> {
   }
 
   Future<ErrorEntity?> loadMore() async {
+    final BreakingNewsState clone = state.copyWith(
+      errorEntity: BusinessException('business', 'msg', tag: '12', params: 15),
+    );
+    state = clone;
+    return null;
     try {
       if (state.noMoreData) {
         return null;
